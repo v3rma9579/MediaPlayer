@@ -12,7 +12,7 @@ class VideoWindow(QMainWindow):
     def __init__(self, parent=None):
         super(VideoWindow, self).__init__(parent)
         self.setWindowTitle("Py Player")
-        self.setWindowIcon(QIcon('xyz.png'))
+        self.setWindowIcon(QIcon('icons/xyz.png'))
         self.mediaPlayer = QMediaPlayer(None, QMediaPlayer.VideoSurface)
 
         videoWidget = QVideoWidget()
@@ -20,13 +20,13 @@ class VideoWindow(QMainWindow):
         # Button for backward slider
         self.backButton = QPushButton()
         self.backButton.setEnabled(False)
-        self.backButton.setIcon(QIcon('rewind.png'))
+        self.backButton.setIcon(QIcon('icons/rewind.png'))
         self.backButton.clicked.connect(self.backSlider10)
 
         # Button for forward slider
         self.forwardButton = QPushButton()
         self.forwardButton.setEnabled(False)
-        self.forwardButton.setIcon(QIcon('forward.png'))
+        self.forwardButton.setIcon(QIcon('icons/forward.png'))
         self.forwardButton.clicked.connect(self.forwardSlider10)
 
         # Button for pause/play
@@ -57,7 +57,7 @@ class VideoWindow(QMainWindow):
         # Button for mute/ unmute
         self.volumeButton = QPushButton()
         self.volumeButton.setEnabled(False)
-        self.volumeButton.setIcon(QIcon('volume-max.png'))
+        self.volumeButton.setIcon(QIcon('icons/volume-max.png'))
 
         if self.mediaPlayer.volume() != 0:
             self.volumeButton.clicked.connect(self.muteVolume)
@@ -99,13 +99,13 @@ class VideoWindow(QMainWindow):
         self.shortcut7.activated.connect(self.toggleSlider)
 
         # Create new action
-        openAction = QAction(QIcon('folder.png'), '&Open', self)
+        openAction = QAction(QIcon('icons/folder.png'), '&Open', self)
         openAction.setShortcut('Ctrl+O')
         openAction.setStatusTip('Open file')
         openAction.triggered.connect(self.openFile)
 
         # Create exit action
-        exitAction = QAction(QIcon('close.png'), '&Exit', self)
+        exitAction = QAction(QIcon('icons/close.png'), '&Exit', self)
         exitAction.setShortcut('Ctrl+Q')
         exitAction.setStatusTip('Exit application')
         exitAction.triggered.connect(self.exitCall)
@@ -199,16 +199,16 @@ class VideoWindow(QMainWindow):
         value = self.mediaPlayer.volume()
 
         if value == 0:
-            self.volumeButton.setIcon(QIcon('volume-mute.png'))
+            self.volumeButton.setIcon(QIcon('icons/volume-mute.png'))
 
         elif 0 < value <= 30:
-            self.volumeButton.setIcon(QIcon('low-volume.png'))
+            self.volumeButton.setIcon(QIcon('icons/low-volume.png'))
 
         elif 30 < value <= 80:
-            self.volumeButton.setIcon(QIcon('medium-volume.png'))
+            self.volumeButton.setIcon(QIcon('icons/medium-volume.png'))
 
         else:
-            self.volumeButton.setIcon(QIcon('volume-max.png'))
+            self.volumeButton.setIcon(QIcon('icons/volume-max.png'))
 
     def volumeDown(self):
         self.mediaPlayer.setVolume(self.mediaPlayer.volume() - 10)
@@ -216,29 +216,29 @@ class VideoWindow(QMainWindow):
         value = self.mediaPlayer.volume()
 
         if value == 0:
-            self.volumeButton.setIcon(QIcon('volume-mute.png'))
+            self.volumeButton.setIcon(QIcon('icons/volume-mute.png'))
 
         elif 0 < value <= 30:
-            self.volumeButton.setIcon(QIcon('low-volume.png'))
+            self.volumeButton.setIcon(QIcon('icons/low-volume.png'))
 
         elif 30 < value <= 80:
-            self.volumeButton.setIcon(QIcon('medium-volume.png'))
+            self.volumeButton.setIcon(QIcon('icons/medium-volume.png'))
 
         else:
-            self.volumeButton.setIcon(QIcon('volume-max.png'))
+            self.volumeButton.setIcon(QIcon('icons/volume-max.png'))
 
     def getCurrentVolume(self):
         return self.mediaPlayer.volume()
 
     def muteVolume(self):
         self.mediaPlayer.setVolume(0)
-        self.volumeButton.setIcon(QIcon('volume-mute.png'))
+        self.volumeButton.setIcon(QIcon('icons/volume-mute.png'))
         return True
 
     def unmuteVolume(self):
         if self.muteVolume():
             self.mediaPlayer.setVolume(self.getCurrentVolume)
-            self.volumeButton.setIcon(QIcon('volume.png'))
+            self.volumeButton.setIcon(QIcon('icons/volume.png'))
 
     def fullScreen(self):
         if self.windowState() & Qt.WindowFullScreen:
