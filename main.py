@@ -58,12 +58,7 @@ class VideoWindow(QMainWindow):
         self.volumeButton = QPushButton()
         self.volumeButton.setEnabled(False)
         self.volumeButton.setIcon(QIcon('icons/volume-max.png'))
-
-        if self.mediaPlayer.volume() != 0:
-            self.volumeButton.clicked.connect(self.muteVolume)
-
-        else:
-            self.volumeButton.clicked.connect(self.unmuteVolume)
+        self.volumeButton.clicked.connect(self.muteVolume)
 
         self.errorLabel = QLabel()
         self.errorLabel.setSizePolicy(QSizePolicy.Preferred, QSizePolicy.Maximum)
@@ -72,13 +67,8 @@ class VideoWindow(QMainWindow):
         self.shortcut1 = QShortcut(QKeySequence('Space'), self)
         self.shortcut1.activated.connect(self.play)
 
-        if self.mediaPlayer.volume() != 0:
-            self.shortcut2 = QShortcut(QKeySequence('M'), self)
-            self.shortcut2.activated.connect(self.muteVolume)
-
-        else:
-            self.shortcut2 = QShortcut(QKeySequence('M'), self)
-            self.shortcut2.activated.connect(self.unmuteVolume)
+        self.shortcut2 = QShortcut(QKeySequence('M'), self)
+        self.shortcut2.activated.connect(self.muteVolume)
 
         self.shortcut3 = QShortcut(QKeySequence('Up'), self)
         self.shortcut3.activated.connect(self.volumeUp)
@@ -193,9 +183,7 @@ class VideoWindow(QMainWindow):
     def backSlider10(self):
         self.mediaPlayer.setPosition(self.mediaPlayer.position() - 10000)
 
-    def volumeUp(self):
-        self.mediaPlayer.setVolume(self.mediaPlayer.volume() + 10)
-
+    def volumeAdjust(self):
         value = self.mediaPlayer.volume()
 
         if value == 0:
@@ -209,36 +197,25 @@ class VideoWindow(QMainWindow):
 
         else:
             self.volumeButton.setIcon(QIcon('icons/volume-max.png'))
+
+    def volumeUp(self):
+        self.mediaPlayer.setVolume(self.mediaPlayer.volume() + 10)
+        self.volumeAdjust()
 
     def volumeDown(self):
         self.mediaPlayer.setVolume(self.mediaPlayer.volume() - 10)
-
-        value = self.mediaPlayer.volume()
-
-        if value == 0:
-            self.volumeButton.setIcon(QIcon('icons/volume-mute.png'))
-
-        elif 0 < value <= 30:
-            self.volumeButton.setIcon(QIcon('icons/low-volume.png'))
-
-        elif 30 < value <= 80:
-            self.volumeButton.setIcon(QIcon('icons/medium-volume.png'))
-
-        else:
-            self.volumeButton.setIcon(QIcon('icons/volume-max.png'))
+        self.volumeAdjust()
 
     def getCurrentVolume(self):
         return self.mediaPlayer.volume()
 
     def muteVolume(self):
-        self.mediaPlayer.setVolume(0)
-        self.volumeButton.setIcon(QIcon('icons/volume-mute.png'))
-        return True
-
-    def unmuteVolume(self):
-        if self.muteVolume():
-            self.mediaPlayer.setVolume(self.getCurrentVolume)
-            self.volumeButton.setIcon(QIcon('icons/volume.png'))
+        if self.getCurrentVolume() != 0:
+            self.mediaPlayer.setVolume(0)
+            self.volumeButton.setIcon(QIcon('icons/volume-mute.png'))
+        else:
+            self.mediaPlayer.setVolume(100)
+            self.volumeButton.setIcon(QIcon('icons/volume-max.png'))
 
     def fullScreen(self):
         if self.windowState() & Qt.WindowFullScreen:
