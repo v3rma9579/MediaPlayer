@@ -13,6 +13,7 @@ class VideoWindow(QMainWindow):
         super(VideoWindow, self).__init__(parent)
         self.setWindowTitle("Py Player")
         self.setWindowIcon(QIcon('icons/xyz.png'))
+        # self.setStyleSheet("background-color: black;")
         self.mediaPlayer = QMediaPlayer(None, QMediaPlayer.VideoSurface)
 
         videoWidget = QVideoWidget()
@@ -42,12 +43,14 @@ class VideoWindow(QMainWindow):
         self.lbl.setReadOnly(True)
         self.lbl.setFixedWidth(70)
         self.lbl.setUpdatesEnabled(True)
+        self.lbl.setStyleSheet(stylesheet(self))
         self.lbl.selectionChanged.connect(lambda: self.lbl.setSelection(0, 0))
 
         self.elbl = QLineEdit('00:00:00')
         self.elbl.setReadOnly(True)
         self.elbl.setFixedWidth(70)
         self.elbl.setUpdatesEnabled(True)
+        self.elbl.setStyleSheet(stylesheet(self))
         self.elbl.selectionChanged.connect(lambda: self.elbl.setSelection(0, 0))
 
         self.positionSlider = QSlider(Qt.Horizontal, self)
@@ -56,12 +59,14 @@ class VideoWindow(QMainWindow):
         self.positionSlider.setSingleStep(2)
         self.positionSlider.setPageStep(20)
         self.positionSlider.setStyleSheet(stylesheet(self))
+        self.positionSlider.setAttribute(Qt.WA_TranslucentBackground, True)
 
         # Button for mute/ unmute
         self.volumeButton = QPushButton()
         self.volumeButton.setEnabled(False)
         self.volumeButton.setIcon(QIcon('icons/volume-max.png'))
         self.volumeButton.clicked.connect(self.muteVolume)
+        self.volumeButton.setAttribute(Qt.WA_TranslucentBackground, True)
 
         self.errorLabel = QLabel()
         self.errorLabel.setSizePolicy(QSizePolicy.Preferred, QSizePolicy.Maximum)
@@ -108,6 +113,7 @@ class VideoWindow(QMainWindow):
         fileMenu = menuBar.addMenu('&File')
         fileMenu.addAction(openAction)
         fileMenu.addAction(exitAction)
+        fileMenu.setStyleSheet("background-color: white;")
 
         # Create a widget for window contents
         wid = QWidget(self)
@@ -286,14 +292,6 @@ QSlider::handle:horizontal
 background: transparent;
 width: 8px;
 }
-QSlider::handle:horizontal 
-{
-color: #CE9605; 
-background-color: #CE9605; 
-border: 1px solid white;
-width: 5px;
-height: 2px;
-}
 QSlider::groove:horizontal {
 border: 1px solid #444444;
 height: 8px;
@@ -322,6 +320,12 @@ border-color: #999999;
 }
 QSlider::handle:horizontal:disabled {
 background: #2a82da;
+}
+QLineEdit
+{
+color: #585858;
+border: 0px solid #076100;
+font-size: 8pt;
 }
 """
 
