@@ -17,6 +17,8 @@ class VideoWindow(QMainWindow):
 
         videoWidget = QVideoWidget()
 
+        self.widescreen = True
+
         # Button for backward slider
         self.backButton = QPushButton()
         self.backButton.setEnabled(False)
@@ -53,6 +55,7 @@ class VideoWindow(QMainWindow):
         self.positionSlider.sliderMoved.connect(self.setPosition)
         self.positionSlider.setSingleStep(2)
         self.positionSlider.setPageStep(20)
+        self.positionSlider.setStyleSheet(stylesheet(self))
 
         # Button for mute/ unmute
         self.volumeButton = QPushButton()
@@ -263,15 +266,64 @@ class VideoWindow(QMainWindow):
         else:
             self.showSlider()
 
-    def menuRequested(self):
+    def menuRequested(self, point):
         menu = QMenu()
         actionFull = menu.addAction(QIcon.fromTheme("view-fullscreen"), "Fullscreen (f)")
 
         actionFull.triggered.connect(self.fullScreen)
 
+        menu.exec_(self.mapToGlobal(point))
+
     def handleError(self):
         self.playButton.setEnabled(False)
         self.errorLabel.setText("Error: " + self.mediaPlayer.errorString())
+
+
+def stylesheet(self):
+    return """
+QSlider::handle:horizontal 
+{
+background: transparent;
+width: 8px;
+}
+QSlider::handle:horizontal 
+{
+color: #CE9605; 
+background-color: #CE9605; 
+border: 1px solid white;
+width: 5px;
+height: 2px;
+}
+QSlider::groove:horizontal {
+border: 1px solid #444444;
+height: 8px;
+     background: qlineargradient(y1: 0, y2: 1,
+                                 stop: 0 #2e3436, stop: 1.0 #000000);
+}
+QSlider::sub-page:horizontal {
+background: qlineargradient( y1: 0, y2: 1,
+    stop: 0 #729fcf, stop: 1 #2a82da);
+border: 1px solid #777;
+height: 8px;
+}
+QSlider::handle:horizontal:hover {
+background: #2a82da;
+height: 8px;
+width: 18px;
+border: 1px solid #2e3436;
+}
+QSlider::sub-page:horizontal:disabled {
+background: #bbbbbb;
+border-color: #999999;
+}
+QSlider::add-page:horizontal:disabled {
+background: #2a82da;
+border-color: #999999;
+}
+QSlider::handle:horizontal:disabled {
+background: #2a82da;
+}
+"""
 
 
 if __name__ == '__main__':
