@@ -8,45 +8,44 @@ import sys
 
 
 class VideoWindow(QMainWindow):
-
     def __init__(self, parent=None):
         super(VideoWindow, self).__init__(parent)
-        self.setWindowTitle("Py Player")
-        self.setWindowIcon(QIcon('icons/xyz.png'))
-        # self.setStyleSheet("background-color: black;")
+        self.setWindowTitle("SMP")
+        self.setWindowIcon(QIcon("icons/musical-note.png"))
+        self.setStyleSheet("color: #EDEDED;" "background-color: #171717;")
         self.mediaPlayer = QMediaPlayer(None, QMediaPlayer.VideoSurface)
-
+        self.current_volume_level = 100
         videoWidget = QVideoWidget()
 
         self.widescreen = True
 
-        # Button for backward slider
+        # Button for rewind
         self.backButton = QPushButton()
         self.backButton.setEnabled(False)
-        self.backButton.setIcon(QIcon('icons/rewind.png'))
+        self.backButton.setIcon(QIcon("icons/rewind.png"))
         self.backButton.clicked.connect(self.backSlider10)
 
-        # Button for forward slider
+        # Button for fast forward
         self.forwardButton = QPushButton()
         self.forwardButton.setEnabled(False)
-        self.forwardButton.setIcon(QIcon('icons/forward.png'))
+        self.forwardButton.setIcon(QIcon("icons/forward.png"))
         self.forwardButton.clicked.connect(self.forwardSlider10)
 
         # Button for pause/play
         self.playButton = QPushButton()
         self.playButton.setEnabled(False)
-        self.playButton.setIcon(self.style().standardIcon(QStyle.SP_MediaPlay))
+        self.playButton.setIcon(QIcon("icons/play.png"))
         self.playButton.clicked.connect(self.play)
 
         # Time
-        self.lbl = QLineEdit('00:00:00')
+        self.lbl = QLineEdit("00:00:00")
         self.lbl.setReadOnly(True)
         self.lbl.setFixedWidth(70)
         self.lbl.setUpdatesEnabled(True)
         self.lbl.setStyleSheet(stylesheet(self))
         self.lbl.selectionChanged.connect(lambda: self.lbl.setSelection(0, 0))
 
-        self.elbl = QLineEdit('00:00:00')
+        self.elbl = QLineEdit("00:00:00")
         self.elbl.setReadOnly(True)
         self.elbl.setFixedWidth(70)
         self.elbl.setUpdatesEnabled(True)
@@ -64,56 +63,54 @@ class VideoWindow(QMainWindow):
         # Button for mute/ unmute
         self.volumeButton = QPushButton()
         self.volumeButton.setEnabled(False)
-        self.volumeButton.setIcon(QIcon('icons/volume-max.png'))
+        self.volumeButton.setIcon(QIcon("icons/high-volume.png"))
         self.volumeButton.clicked.connect(self.muteVolume)
-        self.volumeButton.setAttribute(Qt.WA_TranslucentBackground, True)
+        # self.volumeButton.setAttribute(Qt.WA_TranslucentBackground, True)
 
         self.errorLabel = QLabel()
         self.errorLabel.setSizePolicy(QSizePolicy.Preferred, QSizePolicy.Maximum)
 
         # Shortcut for media player
-        self.shortcut1 = QShortcut(QKeySequence('Space'), self)
+        self.shortcut1 = QShortcut(QKeySequence("Space"), self)
         self.shortcut1.activated.connect(self.play)
 
-        self.shortcut2 = QShortcut(QKeySequence('M'), self)
+        self.shortcut2 = QShortcut(QKeySequence("M"), self)
         self.shortcut2.activated.connect(self.muteVolume)
 
-        self.shortcut3 = QShortcut(QKeySequence('Up'), self)
+        self.shortcut3 = QShortcut(QKeySequence("Up"), self)
         self.shortcut3.activated.connect(self.volumeUp)
 
-        self.shortcut4 = QShortcut(QKeySequence('Down'), self)
+        self.shortcut4 = QShortcut(QKeySequence("Down"), self)
         self.shortcut4.activated.connect(self.volumeDown)
 
-        self.shortcut5 = QShortcut(QKeySequence('Right'), self)
+        self.shortcut5 = QShortcut(QKeySequence("Right"), self)
         self.shortcut5.activated.connect(self.forwardSlider10)
 
-        self.shortcut6 = QShortcut(QKeySequence('Left'), self)
+        self.shortcut6 = QShortcut(QKeySequence("Left"), self)
         self.shortcut6.activated.connect(self.backSlider10)
 
-        self.shortcut7 = QShortcut(QKeySequence('Enter'), self)
+        self.shortcut7 = QShortcut(QKeySequence("Enter"), self)
         self.shortcut7.activated.connect(self.fullScreen)
 
-        self.shortcut7 = QShortcut(QKeySequence('H'), self)
+        self.shortcut7 = QShortcut(QKeySequence("H"), self)
         self.shortcut7.activated.connect(self.toggleSlider)
 
         # Create new action
-        openAction = QAction(QIcon('icons/folder.png'), '&Open', self)
-        openAction.setShortcut('Ctrl+O')
-        openAction.setStatusTip('Open file')
+        openAction = QAction("&Open File...", self)
+        openAction.setShortcut("Ctrl+O")
         openAction.triggered.connect(self.openFile)
 
         # Create exit action
-        exitAction = QAction(QIcon('icons/close.png'), '&Exit', self)
-        exitAction.setShortcut('Ctrl+Q')
-        exitAction.setStatusTip('Exit application')
+        exitAction = QAction("&Exit", self)
+        exitAction.setShortcut("Ctrl+X")
         exitAction.triggered.connect(self.exitCall)
 
         # Create menu bar and add action
         menuBar = self.menuBar()
-        fileMenu = menuBar.addMenu('&File')
+        fileMenu = menuBar.addMenu("&File")
         fileMenu.addAction(openAction)
         fileMenu.addAction(exitAction)
-        fileMenu.setStyleSheet("background-color: white;")
+        fileMenu.setStyleSheet(stylesheet(self))
 
         # Create a widget for window contents
         wid = QWidget(self)
@@ -145,10 +142,9 @@ class VideoWindow(QMainWindow):
         self.mediaPlayer.error.connect(self.handleError)
 
     def openFile(self):
-        fileName, _ = QFileDialog.getOpenFileName(self, "Open Movie",
-                                                  QDir.homePath())
+        fileName, _ = QFileDialog.getOpenFileName(self, "Open Movie", QDir.homePath())
 
-        if fileName != '':
+        if fileName != "":
             self.mediaPlayer.setMedia(QMediaContent(QUrl.fromLocalFile(fileName)))
             self.playButton.setEnabled(True)
             self.backButton.setEnabled(True)
@@ -167,9 +163,9 @@ class VideoWindow(QMainWindow):
 
     def mediaStateChanged(self, state):
         if self.mediaPlayer.state() == QMediaPlayer.PlayingState:
-            self.playButton.setIcon(self.style().standardIcon(QStyle.SP_MediaPause))
+            self.playButton.setIcon(QIcon("icons/pause.png"))
         else:
-            self.playButton.setIcon(self.style().standardIcon(QStyle.SP_MediaPlay))
+            self.playButton.setIcon(QIcon("icons/play.png"))
 
     def positionChanged(self, position):
         self.positionSlider.setValue(position)
@@ -193,41 +189,41 @@ class VideoWindow(QMainWindow):
         self.mediaPlayer.setPosition(self.mediaPlayer.position() - 10000)
 
     def volumeAdjust(self):
-        value = self.mediaPlayer.volume()
+        vol = self.mediaPlayer.volume()
 
-        if value == 0:
-            self.volumeButton.setIcon(QIcon('icons/volume-mute.png'))
+        if vol >= 90:
+            self.volumeButton.setIcon(QIcon("icons/high-volume.png"))
 
-        elif 0 < value <= 30:
-            self.volumeButton.setIcon(QIcon('icons/low-volume.png'))
-
-        elif 30 < value <= 80:
-            self.volumeButton.setIcon(QIcon('icons/medium-volume.png'))
+        elif vol > 0:
+            self.volumeButton.setIcon(QIcon("icons/low-volume.png"))
 
         else:
-            self.volumeButton.setIcon(QIcon('icons/volume-max.png'))
+            self.volumeButton.setIcon(QIcon("icons/mute.png"))
 
     def volumeUp(self):
         self.mediaPlayer.setVolume(self.mediaPlayer.volume() + 10)
+        self.current_volume_level = self.mediaPlayer.volume()
         self.volumeAdjust()
 
     def volumeDown(self):
         self.mediaPlayer.setVolume(self.mediaPlayer.volume() - 10)
+        self.current_volume_level = self.mediaPlayer.volume()
         self.volumeAdjust()
 
-    def getCurrentVolume(self):
-        return self.mediaPlayer.volume()
+    # def getCurrentVolume(self):
+    #     return self.mediaPlayer.volume()
 
     def muteVolume(self):
-        if self.getCurrentVolume() != 0:
+        if self.mediaPlayer.volume() > 0:
+            self.current_volume_level = self.mediaPlayer.volume()
             self.mediaPlayer.setVolume(0)
-            self.volumeButton.setIcon(QIcon('icons/volume-mute.png'))
+            self.volumeButton.setIcon(QIcon("icons/mute.png"))
         else:
-            self.mediaPlayer.setVolume(100)
-            self.volumeButton.setIcon(QIcon('icons/volume-max.png'))
+            self.mediaPlayer.setVolume(self.current_volume_level)
+            self.volumeButton.setIcon(QIcon("icons/high-volume.png"))
 
     def fullScreen(self):
-        if self.windowState() & Qt.WindowFullScreen:
+        if self.windowState() == Qt.WindowFullScreen:
             QApplication.setOverrideCursor(Qt.ArrowCursor)
             self.showNormal()
         else:
@@ -274,7 +270,9 @@ class VideoWindow(QMainWindow):
 
     def menuRequested(self, point):
         menu = QMenu()
-        actionFull = menu.addAction(QIcon.fromTheme("view-fullscreen"), "Fullscreen (f)")
+        actionFull = menu.addAction(
+            QIcon.fromTheme("view-fullscreen"), "Fullscreen (f)"
+        )
 
         actionFull.triggered.connect(self.fullScreen)
 
@@ -287,52 +285,67 @@ class VideoWindow(QMainWindow):
 
 def stylesheet(self):
     return """
-QSlider::handle:horizontal 
-{
-background: transparent;
-width: 8px;
+QSlider::handle:horizontal {
+  background: #444444;
+  width: 8px;
 }
+
 QSlider::groove:horizontal {
-border: 1px solid #444444;
-height: 8px;
-     background: qlineargradient(y1: 0, y2: 1,
-                                 stop: 0 #2e3436, stop: 1.0 #000000);
+  border: 1px solid #444444;
+  height: 8px;
+  background: qlineargradient(y1: 0, y2: 1, stop: 0 #2e3436, stop: 1.0 #000000);
 }
+
 QSlider::sub-page:horizontal {
-background: qlineargradient( y1: 0, y2: 1,
-    stop: 0 #729fcf, stop: 1 #2a82da);
-border: 1px solid #777;
-height: 8px;
+  background: qlineargradient( y1: 0, y2: 1, stop: 0 #729fcf, stop: 1 #2a82da);
+  border: 1px solid #777;
+  height: 8px;
 }
+
 QSlider::handle:horizontal:hover {
-background: #2a82da;
-height: 8px;
-width: 18px;
-border: 1px solid #2e3436;
+  background: #2a82da;
+  height: 8px;
+  width: 18px;
+  border: 1px solid #2e3436;
 }
+
 QSlider::sub-page:horizontal:disabled {
-background: #bbbbbb;
-border-color: #999999;
+  background: #bbbbbb;
+  border-color: #999999;
 }
+
 QSlider::add-page:horizontal:disabled {
-background: #2a82da;
-border-color: #999999;
+  background: #2a82da;
+  border-color: #999999;
 }
+
 QSlider::handle:horizontal:disabled {
-background: #2a82da;
+  background: #2a82da;
 }
-QLineEdit
-{
-color: #585858;
-border: 0px solid #076100;
-font-size: 8pt;
+QLineEdit {
+  color: #585858;
+  border: 0px solid #076100;
+  font-size: 8pt;
+}
+
+QMenu {
+  border: 1px solid #444444;
+  margin: 0;
+}
+
+QMenu::item {
+  padding: 2px 25px 2px 20px;
+}
+
+QMenu::item:selected {
+  background-color: #444444;
 }
 """
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     app = QApplication(sys.argv)
     player = VideoWindow()
-    player.resize(1200, 800)
+    player.setMinimumSize(1280, 720)
     player.show()
-    sys.exit(app.exec_())
+    app.exec()
