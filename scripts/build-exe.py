@@ -10,6 +10,7 @@ if __name__ == '__main__':
     # path to the main.py file
     APP_PATH = APP_DIR.joinpath('sources', 'main.py')
     ICON_PATH = APP_DIR.joinpath('icons', '256x256.ico')
+    ICON_DIR = APP_DIR.joinpath('icons')
     DIST_DIR = pathlib.Path(APP_DIR.joinpath('release'))
     try:
         DIST_DIR.mkdir(exist_ok=True)
@@ -21,6 +22,8 @@ if __name__ == '__main__':
             fr'{APP_NAME}',
             '--distpath',
             fr'{DIST_DIR}',
+            '--add-data',
+            f'{ICON_DIR};icons',
             '--clean',
             '--noconsole',
             '--noconfirm'
