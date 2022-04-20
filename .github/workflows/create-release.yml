@@ -1,0 +1,59 @@
+name: New Release
+
+# Controls when the workflow will run
+on:
+  # Triggers the workflow on push or pull request events but only for the main branch
+  push:
+    tags:
+      - 'v*'
+
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+jobs:
+  # This workflow contains a single job called "build"
+  build:
+    # The type of runner that the job will run on
+    runs-on: windows-latest
+
+    # Steps represent a sequence of tasks that will be executed as part of the job
+    steps:
+      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+      - uses: actions/checkout@v3
+
+      # upgrade pip
+      - name: Upgrade pip
+        shell: pwsh
+        run: |
+          python.exe -m pip install wheel
+          python.exe -m pip install --upgrade pip
+          python.exe -m pip install -r requirements.txt
+
+      - name: Create windows binary
+        shell: pwsh
+        run: |
+          cd .\scripts\
+          python.exe build-exe.py
+
+      - name: Create Release
+        id: create_release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: ${{ github.ref }}
+          release_name: WS2DB
+          draft: false
+          prerelease: false
+
+      - name: Upload artifacts
+        id: upload-release-asset
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ''.\scripts\Media Player.zip'
+          asset_name: 'Media Player.zip'
+          asset_content_type: application/zip
