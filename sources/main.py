@@ -11,7 +11,7 @@ class VideoWindow(QMainWindow):
     def __init__(self, parent=None):
         super(VideoWindow, self).__init__(parent)
         self.setWindowTitle("SMP")
-        self.setWindowIcon(QIcon("icons/musical-note.png"))
+        self.setWindowIcon(QIcon("../icons/musical-note.png"))
         self.setStyleSheet("color: #EDEDED;" "background-color: #171717;")
         self.mediaPlayer = QMediaPlayer(None, QMediaPlayer.VideoSurface)
         self.current_volume_level = 100
@@ -22,19 +22,19 @@ class VideoWindow(QMainWindow):
         # Button for rewind
         self.backButton = QPushButton()
         self.backButton.setEnabled(False)
-        self.backButton.setIcon(QIcon("icons/rewind.png"))
+        self.backButton.setIcon(QIcon("../icons/rewind.png"))
         self.backButton.clicked.connect(self.backSlider10)
 
         # Button for fastforward
         self.forwardButton = QPushButton()
         self.forwardButton.setEnabled(False)
-        self.forwardButton.setIcon(QIcon("icons/forward.png"))
+        self.forwardButton.setIcon(QIcon("../icons/forward.png"))
         self.forwardButton.clicked.connect(self.forwardSlider10)
 
         # Button for pause/play
         self.playButton = QPushButton()
         self.playButton.setEnabled(False)
-        self.playButton.setIcon(QIcon("icons/play.png"))
+        self.playButton.setIcon(QIcon("../icons/play.png"))
         self.playButton.clicked.connect(self.play)
 
         # Time
@@ -63,7 +63,7 @@ class VideoWindow(QMainWindow):
         # Button for mute/ unmute
         self.volumeButton = QPushButton()
         self.volumeButton.setEnabled(False)
-        self.volumeButton.setIcon(QIcon("icons/high-volume.png"))
+        self.volumeButton.setIcon(QIcon("../icons/high-volume.png"))
         self.volumeButton.clicked.connect(self.muteVolume)
         # self.volumeButton.setAttribute(Qt.WA_TranslucentBackground, True)
 
@@ -96,7 +96,7 @@ class VideoWindow(QMainWindow):
         self.shortcut7.activated.connect(self.toggleSlider)
 
         # Create new action
-        openAction = QAction("&Open File.", self)
+        openAction = QAction("&Open File", self)
         openAction.setShortcut("Ctrl+O")
         openAction.triggered.connect(self.openFile)
 
@@ -163,9 +163,9 @@ class VideoWindow(QMainWindow):
 
     def mediaStateChanged(self, state):
         if self.mediaPlayer.state() == QMediaPlayer.PlayingState:
-            self.playButton.setIcon(QIcon("icons/pause.png"))
+            self.playButton.setIcon(QIcon("../icons/pause.png"))
         else:
-            self.playButton.setIcon(QIcon("icons/play.png"))
+            self.playButton.setIcon(QIcon("../icons/play.png"))
 
     def positionChanged(self, position):
         self.positionSlider.setValue(position)
@@ -192,13 +192,13 @@ class VideoWindow(QMainWindow):
         vol = self.mediaPlayer.volume()
 
         if vol >= 75:
-            self.volumeButton.setIcon(QIcon("icons/high-volume.png"))
+            self.volumeButton.setIcon(QIcon("../icons/high-volume.png"))
 
         elif 0 < vol < 75:
-            self.volumeButton.setIcon(QIcon("icons/low-volume.png"))
+            self.volumeButton.setIcon(QIcon("../icons/low-volume.png"))
 
         else:
-            self.volumeButton.setIcon(QIcon("icons/mute.png"))
+            self.volumeButton.setIcon(QIcon("../icons/mute.png"))
 
     def volumeUp(self):
         self.mediaPlayer.setVolume(self.mediaPlayer.volume() + 10)
@@ -217,7 +217,7 @@ class VideoWindow(QMainWindow):
         if self.mediaPlayer.volume() != 0:
             self.current_volume_level = self.mediaPlayer.volume()
             self.mediaPlayer.setVolume(0)
-            self.volumeButton.setIcon(QIcon("icons/mute.png"))
+            self.volumeButton.setIcon(QIcon("../icons/mute.png"))
         else:
             self.mediaPlayer.setVolume(self.current_volume_level)
             self.volumeAdjust()
