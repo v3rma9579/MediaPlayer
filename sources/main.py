@@ -116,8 +116,14 @@ class VideoWindow(QMainWindow):
         self.shortcut7 = QShortcut(QKeySequence("f"), self)
         self.shortcut7.activated.connect(self.fullScreen)
 
-        self.shortcut7 = QShortcut(QKeySequence("H"), self)
-        self.shortcut7.activated.connect(self.toggleSlider)
+        # self.shortcut7 = QShortcut(QKeySequence("H"), self)
+        # self.shortcut7.activated.connect(self.toggleSlider)
+
+        self.shortcut8 = QShortcut(QKeySequence("Ctrl+O"), self)
+        self.shortcut8.activated.connect(self.openFile)
+
+        self.shortcut9 = QShortcut(QKeySequence("Ctrl+X"), self)
+        self.shortcut9.activated.connect(self.exitCall)
 
         # Create new action
         openAction = QAction("&Open File", self)
