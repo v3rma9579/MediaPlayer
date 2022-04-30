@@ -19,37 +19,56 @@ class VideoWindow(QMainWindow):
 
         self.widescreen = True
 
+        linkTemplate = '<a href="https://github.com/AMD825301/MediaPlayer">GitHub</a>'
+        label = HyperLinkLabel(self).setText(linkTemplate)
+
+        self.myinfo = f'A simple python media player \nDeveloped by Shubham Verma and Bivas Kumar\
+                      \n©Version 1.0\
+                      \nGithub {label}'
+
+        self.shortcuts = "Open File\tCtrl+O" \
+                         "\nPlay/Pause\tSpacebar" \
+                         "\nRewind\t" \
+                         "\nForward\t" \
+                         "\nVolume Up\t" \
+                         "\nVolume Down\t" \
+                         "\nMute/Unmute\tM" \
+                         "\nFull Screen\tF" \
+                         "\nExit\tCtrl+X"
+
         # Button for rewind
         self.backButton = QPushButton()
-        self.backButton.setEnabled(False)
         self.backButton.setIcon(QIcon("../icons/rewind.png"))
+        # self.backButton.setEnabled(False)
         self.backButton.clicked.connect(self.backSlider10)
 
         # Button for fastforward
         self.forwardButton = QPushButton()
-        self.forwardButton.setEnabled(False)
+        # self.forwardButton.setEnabled(False)
         self.forwardButton.setIcon(QIcon("../icons/forward.png"))
         self.forwardButton.clicked.connect(self.forwardSlider10)
 
         # Button for pause/play
         self.playButton = QPushButton()
-        self.playButton.setEnabled(False)
+        # self.playButton.setEnabled(False)
         self.playButton.setIcon(QIcon("../icons/play.png"))
         self.playButton.clicked.connect(self.play)
 
         # Time
-        self.lbl = QLineEdit("00:00:00")
+        self.lbl = QLineEdit("__:__:__")
         self.lbl.setReadOnly(True)
         self.lbl.setFixedWidth(70)
         self.lbl.setUpdatesEnabled(True)
         self.lbl.setStyleSheet(stylesheet(self))
+        self.lbl.setEnabled(False)
         self.lbl.selectionChanged.connect(lambda: self.lbl.setSelection(0, 0))
 
-        self.elbl = QLineEdit("00:00:00")
+        self.elbl = QLineEdit("__:__:__")
         self.elbl.setReadOnly(True)
         self.elbl.setFixedWidth(70)
         self.elbl.setUpdatesEnabled(True)
         self.elbl.setStyleSheet(stylesheet(self))
+        self.elbl.setEnabled(False)
         self.elbl.selectionChanged.connect(lambda: self.elbl.setSelection(0, 0))
 
         self.positionSlider = QSlider(Qt.Horizontal, self)
@@ -62,10 +81,15 @@ class VideoWindow(QMainWindow):
 
         # Button for mute/ unmute
         self.volumeButton = QPushButton()
-        self.volumeButton.setEnabled(False)
+        # self.volumeButton.setEnabled(False)
         self.volumeButton.setIcon(QIcon("../icons/high-volume.png"))
         self.volumeButton.clicked.connect(self.muteVolume)
         # self.volumeButton.setAttribute(Qt.WA_TranslucentBackground, True)
+
+        # Button for full screen
+        self.fullScreenButton = QPushButton()
+        self.fullScreenButton.setIcon(QIcon("../icons/fullscreen.png"))
+        self.fullScreenButton.clicked.connect(self.fullScreen)
 
         self.errorLabel = QLabel()
         self.errorLabel.setSizePolicy(QSizePolicy.Preferred, QSizePolicy.Maximum)
@@ -89,7 +113,7 @@ class VideoWindow(QMainWindow):
         self.shortcut6 = QShortcut(QKeySequence("Left"), self)
         self.shortcut6.activated.connect(self.backSlider10)
 
-        self.shortcut7 = QShortcut(QKeySequence("Enter"), self)
+        self.shortcut7 = QShortcut(QKeySequence("f"), self)
         self.shortcut7.activated.connect(self.fullScreen)
 
         self.shortcut7 = QShortcut(QKeySequence("H"), self)
@@ -105,12 +129,16 @@ class VideoWindow(QMainWindow):
         exitAction.setShortcut("Ctrl+X")
         exitAction.triggered.connect(self.exitCall)
 
+        aboutAction = QAction("About", self)
+        aboutAction.triggered.connect(self.handleInfo)
+
         # Create menu bar and add action
-        menuBar = self.menuBar()
-        fileMenu = menuBar.addMenu("&File")
-        fileMenu.addAction(openAction)
-        fileMenu.addAction(exitAction)
-        fileMenu.setStyleSheet(stylesheet(self))
+        # menuBar = self.menuBar()
+        # fileMenu = menuBar.addMenu("&File")
+        # fileMenu.addAction(openAction)
+        # fileMenu.addAction(aboutAction)
+        # fileMenu.addAction(exitAction)
+        # fileMenu.setStyleSheet(stylesheet(self))
 
         # Create a widget for window contents
         wid = QWidget(self)
@@ -119,6 +147,7 @@ class VideoWindow(QMainWindow):
         # Create layouts to place inside widget
         controlLayout = QHBoxLayout()
         controlLayout.setContentsMargins(0, 0, 0, 0)
+
         controlLayout.addWidget(self.backButton)
         controlLayout.addWidget(self.playButton)
         controlLayout.addWidget(self.forwardButton)
@@ -126,6 +155,8 @@ class VideoWindow(QMainWindow):
         controlLayout.addWidget(self.positionSlider)
         controlLayout.addWidget(self.elbl)
         controlLayout.addWidget(self.volumeButton)
+        controlLayout.addWidget(self.fullScreenButton)
+
 
         layout = QVBoxLayout()
         layout.addWidget(videoWidget)
@@ -151,6 +182,8 @@ class VideoWindow(QMainWindow):
             self.forwardButton.setEnabled(True)
             self.volumeButton.setEnabled(True)
             self.mediaPlayer.play()
+            self.elbl.setEnabled(True)
+            self.lbl.setEnabled(True)
 
     def exitCall(self):
         sys.exit(app.exec_())
@@ -228,11 +261,10 @@ class VideoWindow(QMainWindow):
             self.showNormal()
         else:
             self.showFullScreen()
-            QApplication.setOverrideCursor(Qt.BlankCursor)
+            QApplication.setOverrideCursor(Qt.ArrowCursor)
 
     def mouseDoubleClickEvent(self, event):
         self.fullScreen()
-        # self.toggleSlider()
 
     def hideSlider(self):
         self.playButton.hide()
@@ -268,15 +300,31 @@ class VideoWindow(QMainWindow):
         else:
             self.showSlider()
 
-    def menuRequested(self, point):
-        menu = QMenu()
-        actionFull = menu.addAction(
-            QIcon.fromTheme("view-fullscreen"), "Fullscreen (f)"
-        )
+    def handleInfo(self):
+        QMessageBox.about(self, "About", self.myinfo)
 
-        actionFull.triggered.connect(self.fullScreen)
+    def showShortCuts(self):
+        QMessageBox.about(self, "Shortcuts", self.shortcuts)
 
-        menu.exec_(self.mapToGlobal(point))
+    def contextMenuEvent(self, event):
+        contextMenu = QMenu(self)
+        openFile = contextMenu.addAction("Open File (Ctrl + O)")
+        fullScreen = contextMenu.addAction("Full Screen")
+        about = contextMenu.addAction("About")
+        shortcuts = contextMenu.addAction("Shortcuts")
+        quitAct = contextMenu.addAction("Exit (Ctrl + X)")
+
+        action = contextMenu.exec_(self.mapToGlobal(event.pos()))
+        if action == quitAct:
+            self.close()
+        elif action == openFile:
+            self.openFile()
+        elif action == fullScreen:
+            self.fullScreen()
+        elif action == about:
+            self.handleInfo()
+        elif action == shortcuts:
+            self.showShortCuts()
 
     def handleError(self):
         self.playButton.setEnabled(False)
@@ -341,6 +389,13 @@ QMenu::item:selected {
   background-color: #444444;
 }
 """
+
+
+class HyperLinkLabel(QLabel):
+    def __init__(self, parent=None):
+        super().__init__()
+        self.setOpenExternalLinks(True)
+        self.setParent(parent)
 
 
 if __name__ == "__main__":
