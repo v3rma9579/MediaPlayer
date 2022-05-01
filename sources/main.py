@@ -22,7 +22,7 @@ class VideoWindow(QMainWindow):
         linkTemplate = '<a href="https://github.com/AMD825301/MediaPlayer">GitHub</a>'
         label = HyperLinkLabel(self).setText(linkTemplate)
 
-        self.myinfo = f'A simple python media player \nDeveloped by Shubham Verma and Bivas Kumar\
+        self.myInfo = f'A simple python media player \nDeveloped by Shubham Verma and Bivas Kumar\
                       \n©Version 1.0\
                       \nGithub {label}'
 
@@ -39,23 +39,22 @@ class VideoWindow(QMainWindow):
         # Button for rewind
         self.backButton = QPushButton()
         self.backButton.setIcon(QIcon("../icons/rewind.png"))
-        # self.backButton.setEnabled(False)
         self.backButton.clicked.connect(self.backSlider10)
 
         # Button for fastforward
         self.forwardButton = QPushButton()
-        # self.forwardButton.setEnabled(False)
         self.forwardButton.setIcon(QIcon("../icons/forward.png"))
         self.forwardButton.clicked.connect(self.forwardSlider10)
 
         # Button for pause/play
         self.playButton = QPushButton()
-        # self.playButton.setEnabled(False)
         self.playButton.setIcon(QIcon("../icons/play.png"))
         self.playButton.clicked.connect(self.play)
+        self.playButton.setSizePolicy(QSizePolicy.Fixed, QSizePolicy.Fixed)
 
         # Time
-        self.lbl = QLineEdit("__:__:__")
+        s = "0.00.00"
+        self.lbl = QLineEdit("%s" % s)
         self.lbl.setReadOnly(True)
         self.lbl.setFixedWidth(70)
         self.lbl.setUpdatesEnabled(True)
@@ -63,7 +62,8 @@ class VideoWindow(QMainWindow):
         self.lbl.setEnabled(False)
         self.lbl.selectionChanged.connect(lambda: self.lbl.setSelection(0, 0))
 
-        self.elbl = QLineEdit("__:__:__")
+        self.elbl = QLineEdit(s)
+        self.elbl.setContentsMargins(0, 0, 0, 0)
         self.elbl.setReadOnly(True)
         self.elbl.setFixedWidth(70)
         self.elbl.setUpdatesEnabled(True)
@@ -71,25 +71,25 @@ class VideoWindow(QMainWindow):
         self.elbl.setEnabled(False)
         self.elbl.selectionChanged.connect(lambda: self.elbl.setSelection(0, 0))
 
-        self.positionSlider = QSlider(Qt.Horizontal, self)
-        self.positionSlider.setRange(0, 100)
-        self.positionSlider.sliderMoved.connect(self.setPosition)
-        self.positionSlider.setSingleStep(2)
-        self.positionSlider.setPageStep(20)
-        self.positionSlider.setStyleSheet(stylesheet(self))
-        self.positionSlider.setAttribute(Qt.WA_TranslucentBackground, True)
+        self.progress_bar = QSlider(Qt.Horizontal, self)
+        self.progress_bar.setRange(0, 100)
+        self.progress_bar.sliderMoved.connect(self.setPosition)
+        self.progress_bar.setSingleStep(2)
+        self.progress_bar.setPageStep(20)
+        self.progress_bar.setStyleSheet(stylesheet(self))
+        self.progress_bar.setAttribute(Qt.WA_TranslucentBackground, True)
 
         # Button for mute/ unmute
         self.volumeButton = QPushButton()
-        # self.volumeButton.setEnabled(False)
         self.volumeButton.setIcon(QIcon("../icons/high-volume.png"))
+        self.volumeButton.setStyleSheet("{spacing: 32px;}")
         self.volumeButton.clicked.connect(self.muteVolume)
-        # self.volumeButton.setAttribute(Qt.WA_TranslucentBackground, True)
 
         # Button for full screen
         self.fullScreenButton = QPushButton()
         self.fullScreenButton.setIcon(QIcon("../icons/fullscreen.png"))
         self.fullScreenButton.clicked.connect(self.fullScreen)
+        self.fullScreenButton.setSizePolicy(QSizePolicy.Fixed, QSizePolicy.Fixed)
 
         self.errorLabel = QLabel()
         self.errorLabel.setSizePolicy(QSizePolicy.Preferred, QSizePolicy.Maximum)
@@ -116,9 +116,6 @@ class VideoWindow(QMainWindow):
         self.shortcut7 = QShortcut(QKeySequence("f"), self)
         self.shortcut7.activated.connect(self.fullScreen)
 
-        # self.shortcut7 = QShortcut(QKeySequence("H"), self)
-        # self.shortcut7.activated.connect(self.toggleSlider)
-
         self.shortcut8 = QShortcut(QKeySequence("Ctrl+O"), self)
         self.shortcut8.activated.connect(self.openFile)
 
@@ -138,34 +135,29 @@ class VideoWindow(QMainWindow):
         aboutAction = QAction("About", self)
         aboutAction.triggered.connect(self.handleInfo)
 
-        # Create menu bar and add action
-        # menuBar = self.menuBar()
-        # fileMenu = menuBar.addMenu("&File")
-        # fileMenu.addAction(openAction)
-        # fileMenu.addAction(aboutAction)
-        # fileMenu.addAction(exitAction)
-        # fileMenu.setStyleSheet(stylesheet(self))
-
         # Create a widget for window contents
         wid = QWidget(self)
         self.setCentralWidget(wid)
 
         # Create layouts to place inside widget
         controlLayout = QHBoxLayout()
-        controlLayout.setContentsMargins(0, 0, 0, 0)
+        controlLayout.setContentsMargins(512, 0, 512, 0)
 
         controlLayout.addWidget(self.backButton)
         controlLayout.addWidget(self.playButton)
         controlLayout.addWidget(self.forwardButton)
-        controlLayout.addWidget(self.lbl)
-        controlLayout.addWidget(self.positionSlider)
-        controlLayout.addWidget(self.elbl)
         controlLayout.addWidget(self.volumeButton)
         controlLayout.addWidget(self.fullScreenButton)
 
+        layout_stack_progress_bar = QHBoxLayout()
+        layout_stack_progress_bar.setContentsMargins(5, 5, 10, 10)
+        layout_stack_progress_bar.addWidget(self.lbl)
+        layout_stack_progress_bar.addWidget(self.progress_bar)
+        layout_stack_progress_bar.addWidget(self.elbl)
 
         layout = QVBoxLayout()
         layout.addWidget(videoWidget)
+        layout.addLayout(layout_stack_progress_bar)
         layout.addLayout(controlLayout)
         layout.addWidget(self.errorLabel)
 
@@ -207,13 +199,13 @@ class VideoWindow(QMainWindow):
             self.playButton.setIcon(QIcon("../icons/play.png"))
 
     def positionChanged(self, position):
-        self.positionSlider.setValue(position)
+        self.progress_bar.setValue(position)
         mtime = QTime(0, 0, 0, 0)
         mtime = mtime.addMSecs(self.mediaPlayer.position())
         self.lbl.setText(mtime.toString())
 
     def durationChanged(self, duration):
-        self.positionSlider.setRange(0, duration)
+        self.progress_bar.setRange(0, duration)
         mtime = QTime(0, 0, 0, 0)
         mtime = mtime.addMSecs(self.mediaPlayer.duration())
         self.elbl.setText(mtime.toString())
@@ -240,74 +232,53 @@ class VideoWindow(QMainWindow):
             self.volumeButton.setIcon(QIcon("../icons/mute.png"))
 
     def volumeUp(self):
-        self.mediaPlayer.setVolume(self.mediaPlayer.volume() + 10)
-        self.current_volume_level = self.mediaPlayer.volume()
-        self.volumeAdjust()
+        if self.mediaPlayer.volume() != 100:
+            self.mediaPlayer.setVolume(self.mediaPlayer.volume() + 10)
+            self.current_volume_level = self.mediaPlayer.volume()
+            self.volumeAdjust()
 
     def volumeDown(self):
-        self.mediaPlayer.setVolume(self.mediaPlayer.volume() - 10)
-        self.current_volume_level = self.mediaPlayer.volume()
-        self.volumeAdjust()
+        if self.mediaPlayer.volume() != 0:
+            self.mediaPlayer.setVolume(self.mediaPlayer.volume() - 10)
+            self.current_volume_level = self.mediaPlayer.volume()
+            self.volumeAdjust()
 
-    # def getCurrentVolume(self):
-    #     return self.mediaPlayer.volume()
+    def getCurrentVolume(self):
+        return self.mediaPlayer.volume()
 
     def muteVolume(self):
-        if self.mediaPlayer.volume() != 0:
+        if self.mediaPlayer.volume() > 0:
             self.current_volume_level = self.mediaPlayer.volume()
             self.mediaPlayer.setVolume(0)
             self.volumeButton.setIcon(QIcon("../icons/mute.png"))
-        else:
+
+        if self.mediaPlayer.volume() == 0:
             self.mediaPlayer.setVolume(self.current_volume_level)
             self.volumeAdjust()
 
     def fullScreen(self):
         if self.windowState() == Qt.WindowFullScreen:
+            self.fullScreenButton.setVisible(True)
+            self.volumeButton.setVisible(True)
+            self.backButton.setVisible(True)
+            self.forwardButton.setVisible(True)
+            self.playButton.setVisible(True)
             QApplication.setOverrideCursor(Qt.ArrowCursor)
             self.showNormal()
         else:
             self.showFullScreen()
+            self.fullScreenButton.setVisible(False)
+            self.volumeButton.setVisible(False)
+            self.forwardButton.setVisible(False)
+            self.backButton.setVisible(False)
+            self.playButton.setVisible(False)
             QApplication.setOverrideCursor(Qt.ArrowCursor)
 
     def mouseDoubleClickEvent(self, event):
         self.fullScreen()
 
-    def hideSlider(self):
-        self.playButton.hide()
-        self.lbl.hide()
-        self.positionSlider.hide()
-        self.elbl.hide()
-        mwidth = self.frameGeometry().width()
-        mheight = self.frameGeometry().height()
-        mleft = self.frameGeometry().left()
-        mtop = self.frameGeometry().top()
-        if self.widescreen:
-            self.setGeometry(mleft, mtop, mwidth, round(mwidth / 1.778))
-        else:
-            self.setGeometry(mleft, mtop, mwidth, round(mwidth / 1.33))
-
-    def showSlider(self):
-        self.playButton.show()
-        self.lbl.show()
-        self.positionSlider.show()
-        self.elbl.show()
-        mwidth = self.frameGeometry().width()
-        mheight = self.frameGeometry().height()
-        mleft = self.frameGeometry().left()
-        mtop = self.frameGeometry().top()
-        if self.widescreen:
-            self.setGeometry(mleft, mtop, mwidth, round(mwidth / 1.55))
-        else:
-            self.setGeometry(mleft, mtop, mwidth, round(mwidth / 1.33))
-
-    def toggleSlider(self):
-        if self.positionSlider.isVisible():
-            self.hideSlider()
-        else:
-            self.showSlider()
-
     def handleInfo(self):
-        QMessageBox.about(self, "About", self.myinfo)
+        QMessageBox.about(self, "About", self.myInfo)
 
     def showShortCuts(self):
         QMessageBox.about(self, "Shortcuts", self.shortcuts)
