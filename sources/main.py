@@ -1,31 +1,25 @@
+import sys
+import smp_qrc
 from PyQt5.QtCore import QDir, Qt, QUrl, QTime
+from PyQt5.QtGui import QIcon, QKeySequence, QPalette, QColor
 from PyQt5.QtMultimedia import QMediaContent, QMediaPlayer
 from PyQt5.QtMultimediaWidgets import QVideoWidget
 from PyQt5.QtWidgets import *
 from PyQt5.QtWidgets import QMainWindow, QWidget, QPushButton, QAction
-from PyQt5.QtGui import QIcon, QKeySequence
-import sys
 
 
-class VideoWindow(QMainWindow):
+class SMPWindow(QMainWindow):
     def __init__(self, parent=None):
-        super(VideoWindow, self).__init__(parent)
+        super(SMPWindow, self).__init__(parent)
         self.setWindowTitle("SMP")
-        self.setWindowIcon(QIcon("../icons/musical-note.png"))
-        self.setStyleSheet("color: #EDEDED;" "background-color: #171717;")
+        self.setWindowIcon(QIcon(":smp.ico"))
         self.mediaPlayer = QMediaPlayer(None, QMediaPlayer.VideoSurface)
         self.current_volume_level = 100
         videoWidget = QVideoWidget()
 
         self.widescreen = True
 
-        linkTemplate = '<a href="https://github.com/AMD825301/MediaPlayer">GitHub</a>'
-        label = HyperLinkLabel(self).setText(linkTemplate)
-
-        self.myInfo = f'A simple python media player \nDeveloped by Shubham Verma and Bivas Kumar\
-                      \n©Version 1.0\
-                      \nGithub {label}'
-
+        # self.about_SMP = f'Simple Media Player\nDeveloped by Shubham Verma & Bivas Kumar\
         self.shortcuts = "Open File\tCtrl+O" \
                          "\nPlay/Pause\tSpacebar" \
                          "\nRewind\t" \
@@ -37,39 +31,41 @@ class VideoWindow(QMainWindow):
                          "\nExit\tCtrl+X"
 
         # Button for rewind
-        self.backButton = QPushButton()
-        self.backButton.setIcon(QIcon("../icons/rewind.png"))
-        self.backButton.clicked.connect(self.backSlider10)
+        self.replayButton = QPushButton()
+        self.replayButton.setIcon(QIcon(":replay_10_black_48dp.svg"))
+        # self.replayButton.setEnabled(False)
+        self.replayButton.clicked.connect(self.backSlider10)
+        # self.replayButton.
 
         # Button for fastforward
         self.forwardButton = QPushButton()
-        self.forwardButton.setIcon(QIcon("../icons/forward.png"))
+        # self.forwardButton.setEnabled(False)
+        self.forwardButton.setIcon(QIcon(":forward_30_black_48dp.svg"))
         self.forwardButton.clicked.connect(self.forwardSlider10)
 
         # Button for pause/play
         self.playButton = QPushButton()
-        self.playButton.setIcon(QIcon("../icons/play.png"))
+        # self.playButton.setEnabled(False)
+        self.playButton.setIcon(QIcon(""))
         self.playButton.clicked.connect(self.play)
         self.playButton.setSizePolicy(QSizePolicy.Fixed, QSizePolicy.Fixed)
 
         # Time
-        s = "0.00.00"
-        self.lbl = QLineEdit("%s" % s)
+        self.lbl = QLineEdit("--:--")
         self.lbl.setReadOnly(True)
         self.lbl.setFixedWidth(70)
         self.lbl.setUpdatesEnabled(True)
-        self.lbl.setStyleSheet(stylesheet(self))
+        # self.lbl.setStyleSheet(stylesheet(self))
         self.lbl.setEnabled(False)
-        self.lbl.selectionChanged.connect(lambda: self.lbl.setSelection(0, 0))
+        # self.lbl.selectionChanged.connect(lambda: self.lbl.setSelection(0, 0))
 
-        self.elbl = QLineEdit(s)
-        self.elbl.setContentsMargins(0, 0, 0, 0)
+        self.elbl = QLineEdit("--:--")
         self.elbl.setReadOnly(True)
         self.elbl.setFixedWidth(70)
         self.elbl.setUpdatesEnabled(True)
-        self.elbl.setStyleSheet(stylesheet(self))
+        # self.elbl.setStyleSheet(stylesheet(self))
         self.elbl.setEnabled(False)
-        self.elbl.selectionChanged.connect(lambda: self.elbl.setSelection(0, 0))
+        # self.elbl.selectionChanged.connect(lambda: self.elbl.setSelection(0, 0))
 
         self.progress_bar = QSlider(Qt.Horizontal, self)
         self.progress_bar.setRange(0, 100)
@@ -79,15 +75,15 @@ class VideoWindow(QMainWindow):
         self.progress_bar.setStyleSheet(stylesheet(self))
         self.progress_bar.setAttribute(Qt.WA_TranslucentBackground, True)
 
-        # Button for mute/ unmute
+        # Button for mute/unmute
         self.volumeButton = QPushButton()
-        self.volumeButton.setIcon(QIcon("../icons/high-volume.png"))
-        self.volumeButton.setStyleSheet("{spacing: 32px;}")
+        # self.volumeButton.setEnabled(False)
+        self.volumeButton.setIcon(QIcon(":volume_up_black_48dp.svg"))
         self.volumeButton.clicked.connect(self.muteVolume)
 
         # Button for full screen
         self.fullScreenButton = QPushButton()
-        self.fullScreenButton.setIcon(QIcon("../icons/fullscreen.png"))
+        self.fullScreenButton.setIcon(QIcon(":fullscreen_black_48dp.svg"))
         self.fullScreenButton.clicked.connect(self.fullScreen)
         self.fullScreenButton.setSizePolicy(QSizePolicy.Fixed, QSizePolicy.Fixed)
 
@@ -143,7 +139,7 @@ class VideoWindow(QMainWindow):
         controlLayout = QHBoxLayout()
         controlLayout.setContentsMargins(512, 0, 512, 0)
 
-        controlLayout.addWidget(self.backButton)
+        controlLayout.addWidget(self.replayButton)
         controlLayout.addWidget(self.playButton)
         controlLayout.addWidget(self.forwardButton)
         controlLayout.addWidget(self.volumeButton)
@@ -159,7 +155,7 @@ class VideoWindow(QMainWindow):
         layout.addWidget(videoWidget)
         layout.addLayout(layout_stack_progress_bar)
         layout.addLayout(controlLayout)
-        layout.addWidget(self.errorLabel)
+        # layout.addWidget(self.errorLabel)
 
         # Set widget to contain window contents
         wid.setLayout(layout)
@@ -171,12 +167,12 @@ class VideoWindow(QMainWindow):
         self.mediaPlayer.error.connect(self.handleError)
 
     def openFile(self):
-        fileName, _ = QFileDialog.getOpenFileName(self, "Open Movie", QDir.homePath())
+        fileName, _ = QFileDialog.getOpenFileName(self, "Open Media", QDir.homePath())
 
         if fileName != "":
             self.mediaPlayer.setMedia(QMediaContent(QUrl.fromLocalFile(fileName)))
             self.playButton.setEnabled(True)
-            self.backButton.setEnabled(True)
+            self.replayButton.setEnabled(True)
             self.forwardButton.setEnabled(True)
             self.volumeButton.setEnabled(True)
             self.mediaPlayer.play()
@@ -194,9 +190,9 @@ class VideoWindow(QMainWindow):
 
     def mediaStateChanged(self, state):
         if self.mediaPlayer.state() == QMediaPlayer.PlayingState:
-            self.playButton.setIcon(QIcon("../icons/pause.png"))
+            self.playButton.setIcon(QIcon(":pause_black_48dp.svg"))
         else:
-            self.playButton.setIcon(QIcon("../icons/play.png"))
+            self.playButton.setIcon(QIcon(":play_arrow_black_48dp.svg"))
 
     def positionChanged(self, position):
         self.progress_bar.setValue(position)
@@ -223,13 +219,13 @@ class VideoWindow(QMainWindow):
         vol = self.mediaPlayer.volume()
 
         if vol >= 75:
-            self.volumeButton.setIcon(QIcon("../icons/high-volume.png"))
+            self.volumeButton.setIcon(QIcon(":volume_up_black_48dp.svg"))
 
         elif 0 < vol < 75:
-            self.volumeButton.setIcon(QIcon("../icons/low-volume.png"))
+            self.volumeButton.setIcon(QIcon(":volume_down_black_48dp.svg"))
 
         else:
-            self.volumeButton.setIcon(QIcon("../icons/mute.png"))
+            self.volumeButton.setIcon(QIcon(":volume_mute_black_48dp.svg"))
 
     def volumeUp(self):
         if self.mediaPlayer.volume() != 100:
@@ -250,9 +246,8 @@ class VideoWindow(QMainWindow):
         if self.mediaPlayer.volume() > 0:
             self.current_volume_level = self.mediaPlayer.volume()
             self.mediaPlayer.setVolume(0)
-            self.volumeButton.setIcon(QIcon("../icons/mute.png"))
-
-        if self.mediaPlayer.volume() == 0:
+            self.volumeButton.setIcon(QIcon(":volume_mute_black_48dp.svg"))
+        else:
             self.mediaPlayer.setVolume(self.current_volume_level)
             self.volumeAdjust()
 
@@ -278,60 +273,64 @@ class VideoWindow(QMainWindow):
         self.fullScreen()
 
     def handleInfo(self):
-        QMessageBox.about(self, "About", self.myInfo)
+        about_SMP = QTextBrowser()
+        about_SMP.setOpenExternalLinks(True)
+        about_SMP.append('<a href=https://github.com/AMD825301/MediaPlayer>View on GitHub</a>')
 
-    def showShortCuts(self):
+        QMessageBox.about(about_SMP, "About", "")
+
+    def showShortcuts(self):
         QMessageBox.about(self, "Shortcuts", self.shortcuts)
 
     def contextMenuEvent(self, event):
-        contextMenu = QMenu(self)
-        openFile = contextMenu.addAction("Open File (Ctrl + O)")
-        fullScreen = contextMenu.addAction("Full Screen")
-        about = contextMenu.addAction("About")
-        shortcuts = contextMenu.addAction("Shortcuts")
-        quitAct = contextMenu.addAction("Exit (Ctrl + X)")
-
-        action = contextMenu.exec_(self.mapToGlobal(event.pos()))
-        if action == quitAct:
+        context_menu = QMenu(self)
+        action_open_file = context_menu.addAction("Open File\tCtrl+O")
+        action_full_screen = context_menu.addAction("Full Screen\tF")
+        action_view_about = context_menu.addAction("About")
+        action_view_shortcuts = context_menu.addAction("Shortcuts")
+        action_quit = context_menu.addAction("Exit\tCtrl+X")
+        action = context_menu.exec_(self.mapToGlobal(event.pos()))
+        if action == action_quit:
             self.close()
-        elif action == openFile:
+        elif action == action_open_file:
             self.openFile()
-        elif action == fullScreen:
+        elif action == action_full_screen:
             self.fullScreen()
-        elif action == about:
+        elif action == action_view_about:
             self.handleInfo()
-        elif action == shortcuts:
-            self.showShortCuts()
+        elif action == action_view_shortcuts:
+            self.showShortcuts()
 
     def handleError(self):
-        self.playButton.setEnabled(False)
-        self.errorLabel.setText("Error: " + self.mediaPlayer.errorString())
+        mbox = QMessageBox()
+        mbox.setIcon()
+        mbox.about(None, "Playback Error", "gandu")
 
 
 def stylesheet(self):
     return """
 QSlider::handle:horizontal {
-  background: #444444;
+  background: #ff0000;
   width: 8px;
 }
 
 QSlider::groove:horizontal {
-  border: 1px solid #444444;
+  border: 0px;
   height: 8px;
-  background: qlineargradient(y1: 0, y2: 1, stop: 0 #2e3436, stop: 1.0 #000000);
+  background: #585858;
 }
 
 QSlider::sub-page:horizontal {
-  background: qlineargradient( y1: 0, y2: 1, stop: 0 #729fcf, stop: 1 #2a82da);
-  border: 1px solid #777;
+  background: #ff0000;
+  border: 0px;
   height: 8px;
 }
 
 QSlider::handle:horizontal:hover {
-  background: #2a82da;
+  background: #ffffff;
   height: 8px;
-  width: 18px;
-  border: 1px solid #2e3436;
+  width: 12px;
+  border: 0px;
 }
 
 QSlider::sub-page:horizontal:disabled {
@@ -349,13 +348,13 @@ QSlider::handle:horizontal:disabled {
 }
 QLineEdit {
   color: #585858;
-  border: 0px solid #076100;
+  border: 0px;
   font-size: 8pt;
 }
 
 QMenu {
-  border: 1px solid #444444;
-  margin: 0;
+  border: 0px;
+  margin: 0px;
 }
 
 QMenu::item {
@@ -363,21 +362,28 @@ QMenu::item {
 }
 
 QMenu::item:selected {
-  background-color: #444444;
+  background-color: #ff0000;
 }
 """
 
 
-class HyperLinkLabel(QLabel):
-    def __init__(self, parent=None):
-        super().__init__()
-        self.setOpenExternalLinks(True)
-        self.setParent(parent)
-
-
 if __name__ == "__main__":
     app = QApplication(sys.argv)
-    player = VideoWindow()
-    player.setMinimumSize(1280, 720)
-    player.show()
-    app.exec()
+    app.setApplicationName("SMP")
+    app.setStyle("Fusion")
+    palette = QPalette()
+    palette.setColor(QPalette.Window, QColor(18, 18, 18, 255))
+    palette.setColor(QPalette.WindowText, QColor(240, 244, 248))
+    palette.setColor(QPalette.Base, QColor(36, 59, 83))
+    palette.setColor(QPalette.Text, QColor(240, 244, 248))
+    palette.setColor(QPalette.Button, QColor(185, 136, 250))
+    palette.setColor(QPalette.ButtonText, QColor(59, 27, 97))
+    palette.setColor(QPalette.BrightText, Qt.red)
+    palette.setColor(QPalette.Link, QColor(42, 130, 218))
+    palette.setColor(QPalette.Highlight, QColor(255, 64, 129))
+    palette.setColor(QPalette.HighlightedText, QColor(33, 33, 33))
+    app.setPalette(palette)
+    smp = SMPWindow()
+    smp.setMinimumSize(640, 480)
+    smp.show()
+    sys.exit(app.exec_())
