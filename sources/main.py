@@ -152,10 +152,7 @@ class SMPWindow(QMainWindow):
         self.media_player.error.connect(self.showErrorDialog)
 
     def showOpenFileDialog(self):
-        try:
-            file, _ = QFileDialog.getOpenFileName(self, "Open Media", QDir.homePath())
-        except:
-            pass
+        file, _ = QFileDialog.getOpenFileName(self, "Open Media", QDir.homePath())
 
         if file != "":
             self.media_player.setMedia(QMediaContent(QUrl.fromLocalFile(file)))
@@ -268,6 +265,7 @@ class SMPWindow(QMainWindow):
         msg_box.setWindowIcon(QIcon(":smp.png"))
         msg_box.setWindowTitle("About")
         msg_box.setTextFormat(Qt.RichText)
+        msg_box.setTextInteractionFlags(Qt.LinksAccessibleByMouse)
         msg_box.setText("<h2>Simple Media Player</h2>")
         msg_box.setInformativeText(
             '<p>Devloped by Shubham and Bivas</p>'
@@ -276,15 +274,60 @@ class SMPWindow(QMainWindow):
         msg_box.exec()
 
     @staticmethod
-    def showShortcuts():
-        table = QTableWidget()
-        table.setRowCount(6)
-        table.setColumnCount(2)
-        table.setItem(0, 0, QTableWidgetItem("Control"))
-        table.setItem(0, 1, QTableWidgetItem("Shortcut"))
-
+    def showShortcutsDialog():
         msg_box = QMessageBox()
-        msg_box.about(table, "Shortcuts", "")
+        msg_box.setIcon(QMessageBox.NoIcon)
+        msg_box.setWindowIcon(QIcon(":smp.png"))
+        msg_box.setWindowTitle("Shortcuts")
+        msg_box.setTextFormat(Qt.RichText)
+        msg_box.setText(
+            '<tr>'
+            '<td>Ctrl+O</td>'
+            '<td>&nbsp;&nbsp;&nbsp;&nbsp;</td>'
+            '<td>Open File</td>'
+            '</tr>'
+            '<tr>'
+            '<td>J</td>'
+            '<td>&#9;</td>'
+            '<td>Replay</td>'
+            '</tr>'
+            '<tr>'
+            '<td>K</td>'
+            '<td></td>'
+            '<td>Play Pause</td>'
+            '</tr>'
+            '<tr>'
+            '<td>L</td>'
+            '<td></td>'
+            '<td>Forward</td>'
+            '</tr>'
+            '<tr>'
+            '<td>&uarr;</td>'
+            '<td></td>'
+            '<td>Raise Volume</td>'
+            '</tr>'
+            '<tr>'
+            '<td>&darr;</td>'
+            '<td></td>'
+            '<td>Lower Volume</td>'
+            '</tr>'
+            '<tr>'
+            '<td>M</td>'
+            '<td></td>'
+            '<td>Mute Unmute</td>'
+            '</tr>'
+            '<tr>'
+            '<td>F</td>'
+            '<td></td>'
+            '<td>Go Full Screen</td>'
+            '</tr>'
+            '<tr>'
+            '<td>Ctrl+X</td>'
+            '<td></td>'
+            '<td>Exit</td>'
+            '</tr>'
+        )
+        msg_box.exec()
 
     def contextMenuEvent(self, event):
         context_menu = QMenu(self)
@@ -303,7 +346,7 @@ class SMPWindow(QMainWindow):
         elif action == action_view_about:
             self.showAboutDialog()
         elif action == action_view_shortcuts:
-            self.showShortcuts()
+            self.showShortcutsDialog()
 
     # @staticmethod
     def showErrorDialog(self):
