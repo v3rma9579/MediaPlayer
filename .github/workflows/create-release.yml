@@ -54,6 +54,6 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: '.\scripts\Media Player.zip'
+          asset_path: '.\scripts\Simple Media Player.zip'
           asset_name: 'Media Player.zip'
           asset_content_type: application/zip
