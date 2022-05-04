@@ -8,29 +8,29 @@
 [![Maintainer](https://img.shields.io/badge/maintainer-thetrotfreak-blue/?logo=github&labelColor=black&color=00cc00)](https://github.com/thetrotfreak)
 [![GitHub contributors](https://img.shields.io/github/contributors/AMD825301/MediaPlayer?logo=github&labelColor=black&color=ff3399)](https://github.com/AMD825301/MediaPlayer/graphs/contributors)
 
-# Simple Media Player
+# SIMPLE MEDIA PLAYER
 
-> A *simple media player* built with **Python** and ❤️
+> A *simple media player* built with **Python** & ❤️
 
-## Download and Installation
+## DOWNLOAD & INSTALLATION
 
-### Getting an Optional Prerequisite
+### GETTING AN OPTIONAL PREREQUISITE
 
 [K-Lite Codec Pack Basic](https://codecguide.com/download_k-lite_codec_pack_basic.htm)
 
-### Getting the App
+### GETTING THE APP
 
 [Simple Media Player](https://github.com/AMD825301/MediaPlayer/releases/latest/download/Simple.Media.Player.zip)
 
-### Running the App
+### RUNNING THE APP
 
-- Extract the downloaded ```Simple Media Player.zip``` package
+- Extract the downloaded ```Simple.Media.Player.zip``` package
 - Find the ```Simple Media Player.exe``` windows executable
 - Start using it!
 
-## Shortcuts
+## IN-APP SHORTCUTS
 
-|    **Function**    | **Shortcut** |
+|  **APP FUNCTION**  | **SHORTCUT** |
 |:------------------:|:------------:|
 |     Play Pause     |   ```K```    |
 | Replay 10 seconds  |   ```J```    |
@@ -39,15 +39,15 @@
 | Toggle Full Screen |   ```F```    |
 |     Open File      | ```Ctrl+O``` |
 |     Close App      | ```Ctrl+X``` |
-|    Raise Volume    |   ```⬆```️   |
-|    Lower Volume    |   ```⬇```️   |
+|    Raise Volume    |      ⬆️      |
+|    Lower Volume    |      ⬇️      |
 
-## Gallery
+## GALLERY
 
 ![img.png](screenshots/img.png)
 ![img_1.png](screenshots/img_1.png)
 ![img_2.png](screenshots/img_2.png)
 
-## License
+## LICENSE
 
 MediaPlayer is licensed under the [MIT License](LICENSE)
