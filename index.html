@@ -24,6 +24,17 @@
   <body>
     <nav class="navbar navbar-expand-lg navbar-dark">
       <div class="container-fluid">
+        <button
+          class="navbar-toggler"
+          type="button"
+          data-bs-toggle="collapse"
+          data-bs-target="#navbarSupportedContent"
+          aria-controls="navbarSupportedContent"
+          aria-expanded="false"
+          aria-label="Toggle navigation"
+        >
+          <span class="navbar-toggler-icon"></span>
+        </button>
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
           <ul class="navbar-nav me-auto mb-2 mb-lg-0">
             <li class="nav-item">
@@ -38,6 +49,7 @@
         </div>
       </div>
     </nav>
+
     <div class="container mt-4">
       <div class="jumbotron">
         <h1 class="text-center">Simple Media Player</h1>
@@ -59,13 +71,23 @@
           <p class="text-light fs-2">OR</p>
         </div>
         <div class="text-center">
-          <button
+          <!-- <button
             class="text-center button-29"
             width="30%"
             onclick="window.location.href='https://github.com/AMD825301/MediaPlayer';"
+            target="_blank"
           >
             View on GitHub
-          </button>
+          </button> -->
+          <a
+            style="text-decoration: none"
+            href="https://github.com/AMD825301/MediaPlayer"
+            target="_blank"
+          >
+            <button class="text-center button-29" width="30%">
+              View on GitHub
+            </button>
+          </a>
         </div>
       </div>
     </div>
