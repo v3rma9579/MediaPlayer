@@ -6,11 +6,12 @@
 
 [![Maintainer](https://img.shields.io/badge/maintainer-AMD825301-blue/?logo=github&labelColor=black&color=00cc00)](https://github.com/AMD825301)
 [![Maintainer](https://img.shields.io/badge/maintainer-thetrotfreak-blue/?logo=github&labelColor=black&color=00cc00)](https://github.com/thetrotfreak)
+
 [![GitHub contributors](https://img.shields.io/github/contributors/AMD825301/MediaPlayer?logo=github&labelColor=black&color=ff3399)](https://github.com/AMD825301/MediaPlayer/graphs/contributors)
 
 # SIMPLE MEDIA PLAYER
 
-> A *simple media player* built with **Python** & ❤️
+> A _simple media player_ built with **Python** & ❤️
 
 ## DOWNLOAD & INSTALLATION
 
@@ -24,21 +25,21 @@
 
 ### RUNNING THE APP
 
-- Extract the downloaded ```Simple.Media.Player.zip``` package
-- Find the ```Simple Media Player.exe``` windows executable
+- Extract the downloaded `Simple.Media.Player.zip` package
+- Find the `Simple Media Player.exe` windows executable
 - Start using it!
 
 ## IN-APP SHORTCUTS
 
 |  **APP FUNCTION**  | **SHORTCUT** |
-|:------------------:|:------------:|
-|     Play Pause     |   ```K```    |
-| Replay 10 seconds  |   ```J```    |
-| Forward 30 seconds |   ```L```    |
-|    Toggle Mute     |   ```M```    |
-| Toggle Full Screen |   ```F```    |
-|     Open File      | ```Ctrl+O``` |
-|     Close App      | ```Ctrl+X``` |
+| :----------------: | :----------: |
+|     Play Pause     |     `K`      |
+| Replay 10 seconds  |     `J`      |
+| Forward 30 seconds |     `L`      |
+|    Toggle Mute     |     `M`      |
+| Toggle Full Screen |     `F`      |
+|     Open File      |   `Ctrl+O`   |
+|     Close App      |   `Ctrl+X`   |
 |    Raise Volume    |      ⬆️      |
 |    Lower Volume    |      ⬇️      |
 
