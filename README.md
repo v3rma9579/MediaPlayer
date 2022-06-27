@@ -13,7 +13,7 @@
 
 > A _simple media player_ built with **Python** & ❤️
 
-> Have a look at [here!](https://amd825301.github.io/MediaPlayer/)
+> Have a look at [here!](https://v3rma9579.github.io/MediaPlayer/)
 
 ## DOWNLOAD & INSTALLATION
 
