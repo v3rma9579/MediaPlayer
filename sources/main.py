@@ -286,7 +286,7 @@ class SMPWindow(QMainWindow):
         msg_box.setText("<h2>Simple Media Player</h2>")
         msg_box.setInformativeText(
             '<p>Devloped by Shubham and Bivas</p>'
-            '<p><a href="https://www.github.com/AMD825301/MediaPlayer">View on GitHub</a></p>')
+            '<p><a href="https://www.github.com/v3rma9579/MediaPlayer">View on GitHub</a></p>')
         msg_box.setStandardButtons(QMessageBox.Ok)
         msg_box.exec()
 
