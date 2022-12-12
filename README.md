@@ -6,6 +6,7 @@
 
 [![Maintainer](https://img.shields.io/badge/maintainer-v3rma9579-blue/?logo=github&labelColor=black&color=00cc00)](https://github.com/v3rma9579)
 [![Maintainer](https://img.shields.io/badge/maintainer-thetrotfreak-blue/?logo=github&labelColor=black&color=00cc00)](https://github.com/thetrotfreak)
+[![Maintainer](https://img.shields.io/badge/maintainer-EternOfFlame-blue/?logo=github&labelColor=black&color=00cc00)](https://github.com/EternOfFlamE)
 
 [![GitHub contributors](https://img.shields.io/github/contributors/v3rma9579/MediaPlayer?logo=github&labelColor=black&color=ff3399)](https://github.com/v3rma9579/MediaPlayer/graphs/contributors)
 
